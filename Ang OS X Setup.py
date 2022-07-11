@@ -2,11 +2,13 @@ import tkinter as tk
 from tkinter import messagebox, CENTER, filedialog, Entry
 import os
 from time import sleep
+import webbrowser
 
 global username, password, username_entry
 username = None
 password = None
-userdetails = {}
+profilePicture = []
+userDetails = {}
 color = "darkgrey"
 setupWindow = tk.Tk()
 setupWindow.title("Ang OS X Setup")
@@ -22,13 +24,50 @@ global page
 page = 1
 
 def read_from_file():
-    pass
+    #this will only be used when Ang OS X needs to read this for login stuff
+    with open('!DONOTCHANGE Ang OS X Configuration', 'r') as f:
+        selectedprofilepicture = f.read()
+        profilePicture = selectedprofilepicture.split(',')
+        print(profilePicture)
 
 def write_to_file():
-    pass
+    with open('!DONOTCHANGE Ang OS X Configuration', 'w') as f:
+        for item in profilePicture:
+            f.write(item + ',')
 
 def setup_finished():
-    pass
+    sleep(1)
+    root = tk.Tk()
+    root.title("Ang OS X")
+    root.state('zoomed')
+    root.iconbitmap('./assets/ang.ico')
+    bg = tk.PhotoImage(file="./assets/10-6-6kgif.gif")
+    image = tk.Label(root, image=bg)
+    image.place(x=0, y=0)
+
+    def teachingNotes():
+        messagebox.showerror("Teaching Notes", "Teaching Notes are not available as yet.")
+
+    def systemPreferences():
+        messagebox.showerror("System Preferences", "System Preferences are not available as yet.")
+
+    def systemUpdate():
+        webbrowser.open_new_tab("https://www.github.com/httpmoeed/angosx")
+
+    def shutdown():
+        messagebox.showinfo("Ang OS X", "Ang OS X is shutting down...")
+        exit()
+
+    teachingNotes = tk.Button(root, text="Teaching Notes", command=teachingNotes)
+    teachingNotes.pack()
+    systemPreferences = tk.Button(root, text="System Preferences", command=systemPreferences)
+    systemPreferences.pack()
+    systemUpdate = tk.Button(root, text="System Update", command=systemUpdate)
+    systemUpdate.pack()
+    shutdown = tk.Button(root, text="Shutdown Ang OS X", command=shutdown)
+    shutdown.pack()
+
+    root.mainloop()
 
 def nextPage():
     global page, username, passsword, username_entry, frame2, userAccount, setupLabel, username_entry, password_entry
@@ -88,7 +127,8 @@ def shutdown():
 def select_profile_picture():
     filename = filedialog.askopenfilename(initialdir="%USERPROFILE%", title="Select Profile Picture",
                                           filetypes=(("GIF image", "*.gif"),))
-    print(filename)
+    profilePicture.append(filename)
+    write_to_file()
 
 
 frame = tk.Frame(setupWindow, bg=color)
