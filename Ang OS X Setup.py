@@ -151,8 +151,7 @@ def nextPage():
         write_to_file("setupTrue", "1")
     elif page == 3:
         # exec(open("ang os x (no setup).py").read())
-        # exit()
-        pass
+        exit()
 
 
 root.mainloop()
